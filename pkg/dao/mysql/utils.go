@@ -34,4 +34,3 @@ func parseToMapArr(daoArr []*Dao) []*map[string]string {
 	}
 	return daoMapArr
 }
-

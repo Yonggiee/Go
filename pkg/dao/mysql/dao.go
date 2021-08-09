@@ -22,13 +22,17 @@ func newDao(t interface{}) Dao {
 
 func ReadAll(t interface{}) ([]*map[string]string, error) {
 	tableName := reflect.TypeOf(t).Name()
-	db, err := initDB();
-	if err != nil { return nil, err }
+	db, err := initDB()
+	if err != nil {
+		return nil, err
+	}
 
 	query := fmt.Sprintf("SELECT * FROM %s;", tableName)
 	rows, err := db.Query(query)
 	defer rows.Close()
-	if err != nil { return nil, err }
+	if err != nil {
+		return nil, err
+	}
 
 	daoArr := extractFromRows(t, rows)
 

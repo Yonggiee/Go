@@ -11,6 +11,8 @@ func initDB() (*sql.DB, error) {
 	os.Setenv("DATABASE_LINK", "root@/startit")
 	l := os.Getenv("DATABASE_LINK")
 	db, err := sql.Open("mysql", l)
-	if err != nil { return nil, err }
+	if err != nil {
+		return nil, err
+	}
 	return db, nil
 }
