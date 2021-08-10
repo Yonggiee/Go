@@ -1,4 +1,4 @@
-create table b (
-    a var(123),
+create table places (
+    a varchar,
     b int
-);
+) 12;

@@ -4,10 +4,11 @@ import (
 	"regexp"
 )
 
-var createTableRegex = regexp.MustCompile(`^create\s+table\s+[_a-z]?[a-z0-9]*\s*\(.*\)$`)
-var innerTableRegex = regexp.MustCompile(`\((.*)\)$`)
+// Regex
+var CREATETABLEREGEX = regexp.MustCompile(`^create\s+table\s+[_a-z]?[a-z0-9]*\s*\(.*\)\s*[0-9]+\s*$`)
 
-var dataTypes = []string{
+// Datatypes
+var DATATYPES = []string{
 	// numeric
 	"int",
 	"integer",
@@ -26,3 +27,6 @@ var dataTypes = []string{
 	"time",
 	"timestamp",
 }
+
+// Insert
+var INSERT = "INSERT INTO VALUES"

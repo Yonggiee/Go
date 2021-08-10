@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	// "fmt"
+	"strconv"
 	"strings"
 )
 
@@ -10,11 +11,15 @@ func parseQuery(query string) (*table, error) {
 	if !checkCreateTableSyntax(query) {
 		return nil, errors.New("Invalid table syntax")
 	}
-	stripCreateSql := innerTableRegex.FindStringSubmatch(query)[0]
+	tableName := strings.Fields(query)[2]
+	stripCreateSql, insertCount, err := getTableDetails(query)
+	if err != nil {
+		return nil, err
+	}
 	colsSql := stripCreateSql[1 : len(stripCreateSql)-1]
 
-	t := table{}
-	for _, colSql := range splitWithoutEmpty(colsSql, ",") {
+	t := table{name: tableName, insertCount: insertCount}
+	for _, colSql := range *splitWithoutEmpty(colsSql, ",") {
 		wordArr := strings.Fields(colSql)
 		if len(wordArr) < 2 {
 			return nil, errors.New("Invalid column syntax")
@@ -28,9 +33,19 @@ func parseQuery(query string) (*table, error) {
 }
 
 func checkCreateTableSyntax(query string) bool {
-	isMatch := createTableRegex.MatchString(query)
+	isMatch := CREATETABLEREGEX.MatchString(query)
 	if !isMatch {
 		return false
 	}
 	return true
+}
+
+func getTableDetails(query string) (string, int, error) {
+	start := strings.Index(query, "(")
+	end := strings.LastIndex(query, ")")
+	insertCount, err := strconv.Atoi(strings.TrimSpace(query[end+1:]))
+	if err != nil {
+		return "", 0, err
+	}
+	return query[start:end], insertCount, nil
 }

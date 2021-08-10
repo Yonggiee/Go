@@ -1,5 +1,12 @@
 package main
 
-func generateInserts(t table) string {
+import (
+	"fmt"
+)
+
+func generateInserts(tables *[]table) string {
+	for _, table := range *tables {
+		fmt.Println(table)
+	}
 	return ""
 }

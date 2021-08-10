@@ -25,7 +25,7 @@ func getSqlFromFile(fileName string) (string, error) {
 	return sqlLowerCase, nil
 }
 
-func splitWithoutEmpty(toSplit string, delim string) []string {
+func splitWithoutEmpty(toSplit string, delim string) *[]string {
 	stringArr := strings.Split(toSplit, delim)
 	var retArr []string
 	for _, str := range stringArr {
@@ -33,5 +33,5 @@ func splitWithoutEmpty(toSplit string, delim string) []string {
 			retArr = append(retArr, str)
 		}
 	}
-	return retArr
+	return &retArr
 }

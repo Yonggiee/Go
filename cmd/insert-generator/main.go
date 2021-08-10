@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	// Read SQL from file
 	if len(os.Args) < 2 {
 		panic("Please enter file name!")
 	}
@@ -16,15 +17,18 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Create SQL tables
 	tables := []table{}
-	queries := splitWithoutEmpty(sql, ";")
-	for _, query := range queries {
+	for _, query := range *splitWithoutEmpty(sql, ";") {
 		fmt.Println(query)
-		query, err := parseQuery(query)
+		table, err := parseQuery(query)
 		if err != nil {
 			log.Fatal(err)
 		}
-		tables = append(tables, *query)
+		tables = append(tables, *table)
 	}
-	fmt.Println(tables)
+
+	// Print generated inserts
+	mock := generateInserts(&tables)
+	fmt.Println(mock)
 }
