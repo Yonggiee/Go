@@ -8,8 +8,9 @@ type column struct {
 }
 
 type table struct {
-	name      string
-	cols      []column
-	dependsOn []table
-	insertCount  int
+	name                  string
+	cols                  []column
+	dependsOn             []table
+	insertCount           int
+	additionalConstraints []string
 }

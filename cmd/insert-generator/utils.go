@@ -2,8 +2,11 @@ package main
 
 import (
 	"bufio"
+	"database/sql"
 	"os"
 	"strings"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func getSqlFromFile(fileName string) (string, error) {
@@ -23,6 +26,32 @@ func getSqlFromFile(fileName string) (string, error) {
 	}
 	sqlLowerCase := strings.ToLower(sql)
 	return sqlLowerCase, nil
+}
+
+func initTempDb() (*sql.DB, error) {
+	name := "test2"
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/")
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	_, err = db.Exec("DROP DATABASE IF EXISTS " + name)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = db.Exec("CREATE DATABASE " + name)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = db.Exec("USE " + name)
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
 
 func splitWithoutEmpty(toSplit string, delim string) *[]string {

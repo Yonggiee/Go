@@ -1,13 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"errors"
 	// "fmt"
 	"strconv"
 	"strings"
 )
 
-func parseQuery(query string) (*table, error) {
+func parseQuery(query string, db *sql.DB) (*table, error) {
 	if !checkCreateTableSyntax(query) {
 		return nil, errors.New("Invalid table syntax")
 	}

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 )
 
@@ -14,21 +13,27 @@ func main() {
 	fileName := os.Args[1]
 	sql, err := getSqlFromFile(fileName)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
+	}
+
+	// Open DB
+	db, err := initTempDb()
+	if err != nil {
+		panic(err)
 	}
 
 	// Create SQL tables
 	tables := []table{}
 	for _, query := range *splitWithoutEmpty(sql, ";") {
 		fmt.Println(query)
-		table, err := parseQuery(query)
+		table, err := parseQuery(query, db)
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 		tables = append(tables, *table)
 	}
 
 	// Print generated inserts
-	mock := generateInserts(&tables)
-	fmt.Println(mock)
+	// mock := generateInserts(&tables)
+	// fmt.Println(mock)
 }
